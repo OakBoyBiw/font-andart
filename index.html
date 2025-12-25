@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Font-andArt</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #ffffff;
+      color: #111;
+      margin: 0;
+      padding: 24px;
+    }
+    .container {
+      max-width: 720px;
+      margin: auto;
+    }
+    h1 {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    p {
+      color: #555;
+      margin-top: 0;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      font-size: 28px;
+      padding: 16px;
+      margin-top: 16px;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      resize: vertical;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .controls label {
+      font-size: 14px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: none;
+      background: #111;
+      color: white;
+      font-size: 16px;
+    }
+    canvas {
+      margin-top: 24px;
+      max-width: 100%;
+      border: 1px dashed #ccc;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Font-andArt</h1>
+    <p>พิมพ์ข้อความ เลือกสไตล์ แล้วดาวน์โหลดเป็นภาพ</p>
+
+    <textarea id="textInput">ลายมือของคุณ</textarea>
+
+    <div class="controls">
+      <label>
+        ขนาด
+        <input type="range" id="size" min="24" max="96" value="48">
+      </label>
+      <label>
+        สี
+        <input type="color" id="color" value="#000000">
+      </label>
+      <label>
+        พื้นหลัง
+        <select id="bg">
+          <option value="#ffffff">ขาว</option>
+          <option value="#000000">ดำ</option>
+        </select>
+      </label>
+    </div>
+
+    <button onclick="downloadImage()">ดาวน์โหลดเป็นภาพ</button>
+
+    <canvas id="canvas"></canvas>
+  </div>
+
+  <script>
+    const textInput = document.getElementById('textInput');
+    const sizeInput = document.getElementById('size');
+    const colorInput = document.getElementById('color');
+    const bgInput = document.getElementById('bg');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function draw() {
+      const text = textInput.value;
+      const size = sizeInput.value;
+      const color = colorInput.value;
+      const bg = bgInput.value;
+
+      canvas.width = 800;
+      canvas.height = 400;
+
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = color;
+      ctx.font = size + "px cursive";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    }
+
+    function downloadImage() {
+      draw();
+      const link = document.createElement('a');
+      link.download = 'font-andart.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    textInput.oninput = draw;
+    sizeInput.oninput = draw;
+    colorInput.oninput = draw;
+    bgInput.onchange = draw;
+
+    draw();
+  </script>
+</body>
+</html>
